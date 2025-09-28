@@ -63,7 +63,8 @@ def crossover(parent_a : List[int] ,parent_b : List[int]):
 def mutate(genome: List[int]) -> List[int]:
     assert len(genome) > 2 
     swap1, swap2 = random.sample(range(len(genome)), 2)
-    genome[swap1], genome[swap2] = genome[swap2], genome[swap1]
+    genome[swap1:swap2] = reversed(genome[swap1:swap2])  
+    #genome[swap1], genome[swap2] = genome[swap2], genome[swap1]
     return genome
 
 def commit_eugenics(
