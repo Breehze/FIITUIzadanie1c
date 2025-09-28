@@ -1,5 +1,6 @@
 import genetic,anneal,random, plotting
 from typing import List,Tuple,Callable
+import argparse
 
 """ Musim spravit  plot pre fitness evoluciu
     Argy na switchovanie  
@@ -7,7 +8,7 @@ from typing import List,Tuple,Callable
 """
 
 """Grid Settings"""
-CITY_AMOUNT : int = 30
+CITY_AMOUNT : int = 20
 GRID_SIZE : int = 200
 
 """Simulated Annealing"""
@@ -36,10 +37,5 @@ first_gen = [perm_list.copy() for i in range(POPULATION_SIZE)]
 
 [random.shuffle(i) for i  in first_gen]
 
-plotting.plot_path("gej",city_locs,*anneal.anneal(first_gen[0],city_locs))
-
-'''path,distance = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
-
-print(path, distance)
-plotting.plot_path("GA-First-Gen",city_locs,first_gen[0],genetic.fitness(genetic.comp_fitness_array(first_gen,city_locs)[0]))
-plotting.plot_path("GA-Tournament",city_locs,path,distance)'''
+#path,distance,hello = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
+a,b,c = anneal.anneal(first_gen[0],city_locs)

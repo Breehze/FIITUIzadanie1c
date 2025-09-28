@@ -60,16 +60,26 @@ def crossover(parent_a : List[int] ,parent_b : List[int]):
     
     return child_a,child_b
 
-def mutate(genome: List[int]):
+def mutate(genome: List[int]) -> List[int]:
     assert len(genome) > 2 
     swap1, swap2 = random.sample(range(len(genome)), 2)
     genome[swap1], genome[swap2] = genome[swap2], genome[swap1]
     return genome
 
-def commit_eugenics(initial_gen : List[List[int]], city_locations : List[Tuple[int,int]], max_generations : int, population_size_per_gen : int, mutation_chance : float , selection_func : Callable) -> Tuple[List[int],float]:
+def commit_eugenics(
+    initial_gen :List[List[int]], 
+    city_locations :List[Tuple[int,int]], 
+    max_generations :int, 
+    population_size_per_gen :int, 
+    mutation_chance :float , 
+    selection_func :Callable
+) -> Tuple[List[int],float,List[float]]:
+    
     current_gen = initial_gen
+    fitness_evo : List[float] = []
     for _ in range(max_generations):
         gen_fitness = comp_fitness_array(current_gen, city_locations)
+        fitness_evo.append(max(gen_fitness))
         winners = selection_func(current_gen, gen_fitness)
 
         next_gen = []
@@ -89,5 +99,4 @@ def commit_eugenics(initial_gen : List[List[int]], city_locations : List[Tuple[i
     final_fitness = comp_fitness_array(current_gen, city_locations)
     best_index = final_fitness.index(max(final_fitness))
     
-    return  current_gen[best_index] , fitness(final_fitness[best_index]) #xd
-    
+    return  current_gen[best_index] , fitness(final_fitness[best_index]), fitness_evo #xd
