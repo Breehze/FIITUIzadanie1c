@@ -12,11 +12,12 @@ def plot_path(title : str,city_locs : List[Tuple[int,int]],path,distance: float)
     plt.legend()
     plt.show()
 
-def plot_evolution(title : str ,evo_list : List[float]) -> None:
+def plot_evolutions(title : str ,evo_lists : List[Tuple[str,List[float]]]) -> None:
     plt.figure(figsize=(10, 6))
-    plt.plot(evo_list, label="Path Distance", color="blue")
+    for evo_list in enumerate(evo_lists):
+        plt.plot(evo_list[1][1], label=evo_list[1][0], color=["red","green","blue"][evo_list[0]])
     plt.xlabel("Iteration")
-    plt.ylabel("Path Length")
+    plt.ylabel("Fitness")
     plt.title(title)
     plt.legend()
     plt.grid(True)

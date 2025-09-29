@@ -39,20 +39,24 @@ first_gen = [perm_list.copy() for i in range(POPULATION_SIZE)]
 
 [random.shuffle(i) for i  in first_gen]
 
+evolutions : List[Tuple] = []
+
 if args.genetic_algo_tournament:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
-    plotting.plot_evolution("Some title",evolution)
+    evolutions.append(("GAT",evolution))
     plotting.plot_path("Some title",city_locs,first_gen[0],distance)
     plotting.plot_path("Some title",city_locs,path,distance)
 
 if args.genetic_algo_rank:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
-    plotting.plot_evolution("Some title",evolution)
+    evolutions.append(("GAR",evolution))
     plotting.plot_path("Some title",city_locs,first_gen[0],distance)
     plotting.plot_path("Some title",city_locs,path,distance)
 
 if args.simulated_annealing:
     path,distance,evolution = anneal.anneal(first_gen[0],city_locs)
-    plotting.plot_evolution("Some title",evolution)
+    evolutions.append(("SA",evolution))
     plotting.plot_path("Some title",city_locs,first_gen[0],distance)
     plotting.plot_path("Some title",city_locs,path,distance)
+
+plotting.plot_evolutions("Some title",evolutions)
