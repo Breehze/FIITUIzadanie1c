@@ -7,16 +7,18 @@ CITY_AMOUNT : int = 20
 GRID_SIZE : int = 200
 
 """Simulated Annealing"""
+INITIAL_TEMP : float = 100
+COOLING_RATE : float = 0.99
 
 """Genetic Algorithm"""
-MAX_GENERATIONS = 200
-MUTATION_CHANCE = 0.05
-POPULATION_SIZE = 1000
+MAX_GENERATIONS : int = 200
+MUTATION_CHANCE : float = 0.05
+POPULATION_SIZE : int = 1000
 
-TOURNAMENT_SIZE = 30
-TOURNAMENT_AMOUNT = 10
+TOURNAMENT_SIZE : int = 30
+TOURNAMENT_AMOUNT : int = 10
 
-WINNERS_AMOUNT = 50
+WINNERS_AMOUNT : int = 50
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-gat","--genetic-algo-tournament",action='store_true')
@@ -44,19 +46,19 @@ evolutions : List[Tuple] = []
 if args.genetic_algo_tournament:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
     evolutions.append(("GAT",evolution))
-    plotting.plot_path("Some title",city_locs,first_gen[0],distance)
-    plotting.plot_path("Some title",city_locs,path,distance)
+    plotting.plot_path("First Gen",city_locs,first_gen[0],distance)
+    plotting.plot_path("Genetic algorithm - Tournament",city_locs,path,distance)
 
 if args.genetic_algo_rank:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
     evolutions.append(("GAR",evolution))
-    plotting.plot_path("Some title",city_locs,first_gen[0],distance)
-    plotting.plot_path("Some title",city_locs,path,distance)
+    plotting.plot_path("First Gen",city_locs,first_gen[0],distance)
+    plotting.plot_path("Genetic algorithm - Rank",city_locs,path,distance)
 
 if args.simulated_annealing:
-    path,distance,evolution = anneal.anneal(first_gen[0],city_locs)
+    path,distance,evolution = anneal.anneal(first_gen[0],city_locs,INITIAL_TEMP,COOLING_RATE)
     evolutions.append(("SA",evolution))
-    plotting.plot_path("Some title",city_locs,first_gen[0],distance)
-    plotting.plot_path("Some title",city_locs,path,distance)
+    plotting.plot_path("Starting point",city_locs,first_gen[0],distance)
+    plotting.plot_path("Simulated Annealing",city_locs,path,distance)
 
-plotting.plot_evolutions("Some title",evolutions)
+plotting.plot_evolutions("Fitness evolution",evolutions) if args.genetic_algo_tournament or args.genetic_algo_rank or args.simulated_annealing else None
