@@ -6,7 +6,7 @@ distance : Callable  = lambda x,y : math.sqrt((x[0] - y[0])**2 + (x[1] - y[1])**
 def swap_pos(path: List[int]) -> List[int]:
     new_path = path.copy()
     point_a, point_b = sorted(random.sample(range(len(path)), 2))
-    new_path[point_a:point_b+1] = new_path[point_a:point_b+1][::-1]   
+    new_path[point_a:point_b+1] = reversed(new_path[point_a:point_b+1])
     return new_path
 
 def compute_path_length(path : List[int],city_locations : List[Tuple[int,int]]) -> float:

@@ -30,7 +30,7 @@ def tournament(population : List[List[int]], scored_population : List[float] , p
     return winners
 
 def rank(population : List[List[int]], scored_population : List[float] , winners_amount : int) -> List[List[int]]:
-    sorted_population = sorted(zip(population, scored_population), key=lambda x: x[1])   
+    sorted_population = sorted(zip(population, scored_population), key=lambda x: x[1],reverse=True)   
     ranks = list(range(1, len(sorted_population)+1)) 
     total_rank = sum(ranks)
     
@@ -63,8 +63,9 @@ def crossover(parent_a : List[int] ,parent_b : List[int]):
 def mutate(genome: List[int]) -> List[int]:
     assert len(genome) > 2 
     swap1, swap2 = random.sample(range(len(genome)), 2)
+    if swap1 > swap2:
+        swap1,swap2  = swap2,swap1 
     genome[swap1:swap2] = reversed(genome[swap1:swap2])  
-    #genome[swap1], genome[swap2] = genome[swap2], genome[swap1]
     return genome
 
 def commit_eugenics(
@@ -82,9 +83,9 @@ def commit_eugenics(
         gen_fitness = comp_fitness_array(current_gen, city_locations)
         fitness_evo.append(max(gen_fitness))
         winners = selection_func(current_gen, gen_fitness)
-
+        elites = [current_gen[gen_fitness.index(max(gen_fitness))]]
         next_gen = []
-        while len(next_gen) < population_size_per_gen:
+        while len(next_gen) < population_size_per_gen-len(elites):
             parent_a, parent_b = random.sample(winners, 2)
             child_a, child_b = crossover(parent_a, parent_b)
 
@@ -94,10 +95,11 @@ def commit_eugenics(
                 child_b = mutate(child_b)
 
             next_gen.extend([child_a, child_b])
-
-        current_gen = next_gen[:population_size_per_gen]
+        
+        next_gen.extend(elites)
+        current_gen = next_gen
 
     final_fitness = comp_fitness_array(current_gen, city_locations)
     best_index = final_fitness.index(max(final_fitness))
     
-    return  current_gen[best_index] , fitness(final_fitness[best_index]), fitness_evo #xd
+    return  current_gen[best_index] , fitness(final_fitness[best_index]), fitness_evo 

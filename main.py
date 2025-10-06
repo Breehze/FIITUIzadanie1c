@@ -3,16 +3,16 @@ from typing import List,Tuple,Callable
 import argparse
 
 """Grid Settings"""
-CITY_AMOUNT : int = 20
+CITY_AMOUNT : int = 30
 GRID_SIZE : int = 200
 
 """Simulated Annealing"""
-INITIAL_TEMP : float = 100
+INITIAL_TEMP : float = 200
 COOLING_RATE : float = 0.99
 
 """Genetic Algorithm"""
-MAX_GENERATIONS : int = 200
-MUTATION_CHANCE : float = 0.05
+MAX_GENERATIONS : int = 400
+MUTATION_CHANCE : float = 0.01
 POPULATION_SIZE : int = 1000
 
 TOURNAMENT_SIZE : int = 30
@@ -24,8 +24,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-gat","--genetic-algo-tournament",action='store_true')
 parser.add_argument("-gar","--genetic-algo-rank",action='store_true')
 parser.add_argument("-sa","--simulated-annealing",action='store_true')
+parser.add_argument("-d","--debug",action='store_true')
 
 args = parser.parse_args()
+
+random.seed(1) if args.debug else None
 
 uniq : Callable = lambda x : x.pop(x.index(random.choice(x)))
 tournament : Callable = lambda  current_gen, gen_fitness : genetic.tournament(current_gen,gen_fitness,TOURNAMENT_SIZE,TOURNAMENT_AMOUNT)
@@ -43,20 +46,34 @@ first_gen = [perm_list.copy() for i in range(POPULATION_SIZE)]
 
 evolutions : List[Tuple] = []
 
+random.seed() if args.debug else None
+
 if args.genetic_algo_tournament:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
+    print("Genetic Algorithm Tournament")
+    print(f"Shortest path found: {path}")
+    print(f"Distance: {distance}")
+    print("------------------------------------")
     evolutions.append(("GAT",evolution))
     plotting.plot_path("First Gen",city_locs,first_gen[0],distance)
     plotting.plot_path("Genetic algorithm - Tournament",city_locs,path,distance)
 
 if args.genetic_algo_rank:
     path,distance,evolution = genetic.commit_eugenics(first_gen,city_locs,MAX_GENERATIONS,POPULATION_SIZE,MUTATION_CHANCE,tournament)
+    print("Genetic Algorithm Rank")
+    print(f"Shortest path found: {path}")
+    print(f"Distance: {distance}")
+    print("------------------------------------")
     evolutions.append(("GAR",evolution))
     plotting.plot_path("First Gen",city_locs,first_gen[0],distance)
     plotting.plot_path("Genetic algorithm - Rank",city_locs,path,distance)
 
 if args.simulated_annealing:
     path,distance,evolution = anneal.anneal(first_gen[0],city_locs,INITIAL_TEMP,COOLING_RATE)
+    print("Simulated annealing")
+    print(f"Shortest path found: {path}")
+    print(f"Distance: {distance}")
+    print("------------------------------------")
     evolutions.append(("SA",evolution))
     plotting.plot_path("Starting point",city_locs,first_gen[0],distance)
     plotting.plot_path("Simulated Annealing",city_locs,path,distance)
