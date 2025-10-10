@@ -8,24 +8,34 @@ Both algorithms are applied to find near-optimal routes in the TSP by exploring 
 ## Run
 #### Create virtual enviroment
 
-`python -m venv ./venv`
+```bash
+python -m venv ./venv
+```
 
 #### Source virtual enviorment
 Linux/Mac
 
-`source ./venv/bin/activate`
+```bash
+source ./venv/bin/activate
+```
 
 Windows
 
-`venv\Scripts\activate`
+```bash
+venv\Scripts\activate
+```
 
 #### Install dependencies
 
-`pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
+```
 
 #### Run the main.py
 
-`python main.py [flags]`
+```bash 
+python main.py [flags]
+```
 
 ## Command-Line Flags
 
