@@ -8,6 +8,7 @@ GRID_SIZE : int = 200
 
 """Simulated Annealing"""
 INITIAL_TEMP : float = 1000
+MINIMAL_TEMP : float = 1e-6
 COOLING_RATE : float = 0.9995
 
 """Genetic Algorithm"""
@@ -71,7 +72,7 @@ if args.genetic_algo_rank:
     plotting.plot_path("Genetic algorithm - Rank",city_locs,path,distance)
 
 if args.simulated_annealing:
-    path,distance,evolution = anneal.anneal(first_gen[0],city_locs,INITIAL_TEMP,COOLING_RATE)
+    path,distance,evolution = anneal.anneal(first_gen[0],city_locs,INITIAL_TEMP,COOLING_RATE,MINIMAL_TEMP)
     plotting.print_info(path,distance)
     evolutions.append(("SA",evolution))
     plotting.plot_path("Starting point",city_locs,first_gen[0],distance)

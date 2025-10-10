@@ -14,16 +14,21 @@ def compute_path_length(path : List[int],city_locations : List[Tuple[int,int]]) 
     path_distance += distance(city_locations[path[0]],city_locations[path[-1]])
     return path_distance
 
-def anneal(initial_permutation : List[int],city_locations : List[Tuple[int,int]],initial_temp:float,cooling_rate : float) -> Tuple[List[int],float,List[float]]:
+def anneal(
+    initial_permutation : List[int],
+    city_locations : List[Tuple[int,int]],
+    initial_temp:float,
+    cooling_rate : float,
+    min_temp: float, 
+) -> Tuple[List[int],float,List[float]]:
+    
     distance_evo : List[float] = []
     current = initial_permutation 
     best = current
     current_distance = compute_path_length(current,city_locations)
     best_distance = current_distance
     
-    min_T = 1e-6
-
-    while initial_temp > min_T:
+    while initial_temp > min_temp:
         candidate = swap_pos(current)
         candidate_distance = compute_path_length(candidate,city_locations)
         delta = candidate_distance - current_distance
