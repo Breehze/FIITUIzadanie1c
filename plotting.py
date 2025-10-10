@@ -21,3 +21,9 @@ def plot_evolutions(title : str ,evo_lists : List[Tuple[str,List[float]]]) -> No
     plt.legend()
     plt.grid(True)
     plt.show()
+
+def print_info(path,distance):
+    print("Genetic Algorithm Tournament")
+    print(f"Shortest path found: {path}")
+    print(f"Distance: {distance}")
+    print("------------------------------------")

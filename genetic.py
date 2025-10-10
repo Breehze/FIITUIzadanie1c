@@ -29,17 +29,17 @@ def tournament(population : List[List[int]], scored_population : List[float] , p
         winners.append(population[winner])
     return winners
 
-def rank(population : List[List[int]], scored_population : List[float] , winners_amount : int) -> List[List[int]]:
-    sorted_population = sorted(zip(population, scored_population), key=lambda x: x[1],reverse=True)   
-    ranks = list(range(1, len(sorted_population)+1)) 
+def rank(population: List[List[int]], scores: List[float], winners_amount: int) -> List[List[int]]:
+    sorted_population = sorted(zip(population, scores), key=lambda x: x[1], reverse=True)
+    ranks = list(range(len(sorted_population), 0, -1))  
     total_rank = sum(ranks)
-    
-    accd = list(accumulate(ranks))
-    
+    accd = list(accumulate(ranks))  
     winners = []
     for _ in range(winners_amount):
-        idx = bisect.bisect_left(accd, random.uniform(0,total_rank))
-        winners.append(sorted_population[idx][0])   
+        pick = random.uniform(0, total_rank)
+        idx = bisect.bisect_left(accd, pick)
+        winners.append(sorted_population[idx][0])
+        
     return winners
 
 def crossover(parent_a : List[int] ,parent_b : List[int]):
@@ -60,12 +60,20 @@ def crossover(parent_a : List[int] ,parent_b : List[int]):
     
     return child_a,child_b
 
-def mutate(genome: List[int]) -> List[int]:
+def mutate_reverse_subseg(genome: List[int]) -> List[int]:
     assert len(genome) > 2 
     swap1, swap2 = random.sample(range(len(genome)), 2)
     if swap1 > swap2:
         swap1,swap2  = swap2,swap1 
     genome[swap1:swap2] = reversed(genome[swap1:swap2])  
+    return genome
+
+def mutate_swap_pos(genome : List[int]) -> List[int]:
+    assert len(genome) > 2 
+    swap1, swap2 = random.sample(range(len(genome)), 2)
+    if swap1 > swap2:
+        swap1,swap2  = swap2,swap1 
+    genome[swap1],genome[swap2] = genome[swap2],genome[swap1]
     return genome
 
 def commit_eugenics(
@@ -74,7 +82,8 @@ def commit_eugenics(
     max_generations :int, 
     population_size_per_gen :int, 
     mutation_chance :float , 
-    selection_func :Callable
+    selection_func :Callable,
+    mutation_func : Callable,
 ) -> Tuple[List[int],float,List[float]]:
     
     current_gen = initial_gen
@@ -90,9 +99,9 @@ def commit_eugenics(
             child_a, child_b = crossover(parent_a, parent_b)
 
             if random.random() < mutation_chance:
-                child_a = mutate(child_a)
+                child_a = mutation_func(child_a) 
             if random.random() < mutation_chance:
-                child_b = mutate(child_b)
+                child_b = mutation_func(child_b)
 
             next_gen.extend([child_a, child_b])
         
