@@ -46,9 +46,10 @@ def crossover(parent_a : List[int] ,parent_b : List[int]):
     assert len(parent_a) == len(parent_b)
     assert len(parent_a) > 4
     
-    genome_split1 : int = random.randrange(1,len(parent_a)//2)
-    genome_split2 : int = random.randrange(len(parent_a)//2,len(parent_a)-1)
-    
+    genome_split1, genome_split2 = random.sample(range(len(parent_a)), 2)
+    if genome_split1 > genome_split2:
+        genome_split1,genome_split2  = genome_split2,genome_split1
+   
     parts_a : List[int] =  parent_a[genome_split1:genome_split2]
     parts_b : List[int]  = parent_b[genome_split1:genome_split2]
     
