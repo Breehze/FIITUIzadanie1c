@@ -80,7 +80,7 @@ WINNERS_AMOUNT : int = 30
 ```
 
 
-main.py contains adjustable parameters for the **Traveling Salesman Problem** solver using **Simulated Annealing (SA)** and a **Genetic Algorithm (GA)**.
+**main.py** contains adjustable parameters for the **Traveling Salesman Problem** solver using **Simulated Annealing (SA)** and a **Genetic Algorithm (GA)**.
 
 - **Grid Settings**: Define the number of cities (`CITY_AMOUNT`) and grid size (`GRID_SIZE`).
 - **Simulated Annealing**: Control temperature (`INITIAL_TEMP`, `MINIMAL_TEMP`) and cooling rate (`COOLING_RATE`).
